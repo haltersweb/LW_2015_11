@@ -1,0 +1,28 @@
+body {
+	background-color: black;
+	color: white;
+}
+#day {
+	font-size: 1.5rem;
+}
+.rooms {
+	text-align: center;
+}
+.room {
+	width: 200px;
+	height: 200px;
+	display: inline-block;
+	box-sizing: border-box;
+	padding-top: 90px;
+	text-align: center;
+}
+[data-status="off"] {
+	background-color: gray;
+}
+[data-status="on"] {
+	background-color: yellow;
+}
+button:focus {
+	background-color: red;
+	color: white;
+}
