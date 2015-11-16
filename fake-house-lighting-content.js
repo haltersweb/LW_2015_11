@@ -5,6 +5,9 @@
 var $dayName = $('#day'),
 	dayMil = 24 * 60 * 60 * 1000; // dayMil is the number of milliseconds in a full day
 	multiplierForDemo = 1 / (60 * 60), // 24 seconds = 24 hours
+	sunCycleTimer = null,
+	dayNameTimer = [],
+	lightTimer = [],
 	lightData = {
 		"monday": {
 			"001": [
@@ -139,13 +142,33 @@ function toMilliseconds(strMilitaryTime) {
 	return eventMill;
 }
 
+function sunCycle() {
+	var $suns = $('#SUN polygon'),
+		currSun = 0;
+	sunCycleTimer = window.setInterval(function () {
+		currSun = (currSun < 24) ? (currSun += 1) : 1;
+		console.log('currSun = ' + currSun);
+		//hide all and show eq(i) sun polygon
+	}, dayMil / 24 * multiplierForDemo);
+}
+
 $('#testButton').on('click', function (evt) {
 	var dayNum = 0; // 0 = Monday
-	// first start the 24 hour clock to change the day name
+	// initialize timers
+	window.clearInterval(sunCycleTimer);
+	for(var i=0; i < dayNameTimer.length; i+=1) {
+	    clearTimeout(dayNameTimer[i]);
+	}
+	for(var i=0; i < lightTimer.length; i+=1) {
+	    clearTimeout(lightTimer[i]);
+	}
+	// start the sunCycle interval
+	sunCycle();
+	// start the 24 hour clock to change the day name
 	Object.keys(lightData).forEach(function(dayName, d) {
-		window.setTimeout(function () {
+		dayNameTimer.push(window.setTimeout(function () {
 			$dayName.text(dayName);
-		}, dayMil * d * multiplierForDemo);
+		}, dayMil * d * multiplierForDemo));
 	});
 	// then create timeouts for each lighting event
 	$.each(lightData, function(day, lights) {
@@ -153,10 +176,10 @@ $('#testButton').on('click', function (evt) {
 			Object.keys(lightEvents).forEach(function(propertyName, i) {
 				var eventTime = toMilliseconds(lightEvents[i].eventTime);
 					waitTime = (eventTime + (dayNum * dayMil)) * multiplierForDemo;
-			    window.setTimeout(function () {
+			    lightTimer.push(window.setTimeout(function () {
 			    	$('[data-id="' + lightId + '"]').attr('data-status', lightEvents[propertyName].event);
 			        console.log(lightEvents[propertyName].eventTime + ': light ' + lightId + ': ' + lightEvents[propertyName].event);
-			    }, waitTime);
+			    }, waitTime));
 			});
 		});
 		dayNum += 1;

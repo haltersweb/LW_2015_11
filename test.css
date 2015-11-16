@@ -16,13 +16,31 @@ body {
 	padding-top: 90px;
 	text-align: center;
 }
-[data-status="off"] {
-	background-color: gray;
+/* eventually remove */
+	[data-status="off"] {
+		background-color: gray;
+	}
+	[data-status="on"] {
+		background-color: yellow;
+	}
+/* end eventually remove */
+svg [data-status="off"] {
+	background-color: transparent; /* eventually remove */
+	display: none;
 }
-[data-status="on"] {
-	background-color: yellow;
+svg [data-status="on"] {
+	background-color: transparent; /* eventually remove */
+	display: block;
+}
+#MOON path,
+#SUN polygon {
+	display: none;
 }
 button:focus {
 	background-color: red;
 	color: white;
+}
+.svg-container {
+	width: 657px;
+	height: 393px;
 }
