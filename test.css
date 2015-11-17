@@ -32,6 +32,9 @@ svg [data-status="on"] {
 	background-color: transparent; /* eventually remove */
 	display: block;
 }
+.svg-container {
+	background-color: #fff;
+}
 #MOON path,
 #SUN polygon {
 	display: none;
@@ -48,3 +51,29 @@ button:focus {
 	width: 657px;
 	height: 393px;
 }
+
+#GRASS.animate {
+  animation: opacity-grass 24s linear infinite;
+}
+#SKY.animate {
+  animation: opacity-sky 24s linear infinite;
+}
+
+@keyframes opacity-grass {
+  0% { opacity: 1; }
+  21% { opacity: 1; }
+  33% { opacity: 0; }
+  67% { opacity: 0; }
+  79% { opacity: 1; }
+  100% { opacity: 1; }
+}
+@keyframes opacity-sky {
+  0% { opacity: 1; }
+  21% { opacity: 1; }
+  33% { opacity: 0.3; }
+  67% { opacity: 0.3; }
+  79% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+

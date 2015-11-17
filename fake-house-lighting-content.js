@@ -3,22 +3,24 @@
 // remember to reset sun/moon when click again
 
 var $dayName = $('#day'),
+	$suns = $('#SUN polygon'),
+	$moons = $('#MOON path'),
 	dayMil = 24 * 60 * 60 * 1000; // dayMil is the number of milliseconds in a full day
 	multiplierForDemo = 1 / (60 * 60), // 24 seconds = 24 hours
-	sunCycleTimer = null,
-	moonCycleTimer = null,
-	dayNameTimer = [],
-	lightTimer = [],
+	window.sunCycleTimer = null,
+	window.moonCycleTimer = null,
+	window.dayNameTimer = [],
+	window.lightTimer = [],
 	lightData = {
 		"monday": {
 			"001": [
 				{
-					"eventTime": "06:30",
+					"eventTime": "06:00",
 					"event": "on",
 					"dim": 100
 				},
 				{
-					"eventTime": "07:30",
+					"eventTime": "07:00",
 					"event": "off"
 				},
 				{
@@ -38,7 +40,7 @@ var $dayName = $('#day'),
 					"dim": 100
 				},
 				{
-					"eventTime": "07:30",
+					"eventTime": "08:30",
 					"event": "off"
 				},
 				{
@@ -144,9 +146,8 @@ function toMilliseconds(strMilitaryTime) {
 }
 
 function sunCycle() {
-	var $suns = $('#SUN polygon'),
-		currSun = 19;
-	sunCycleTimer = window.setInterval(function () {
+	var currSun = 19;
+	window.sunCycleTimer = window.setInterval(function () {
 		$suns.attr('class','');
 		$suns.eq(currSun).attr('class','active');
 		currSun = (currSun < 23) ? (currSun += 1) : 0;
@@ -155,8 +156,7 @@ function sunCycle() {
 }
 
 function moonCycle() {
-	var $moons = $('#MOON path'),
-		currMoon = 7;
+	var currMoon = 7;
 	moonCycleTimer = window.setInterval(function () {
 		$moons.attr('class','');
 		$moons.eq(currMoon).attr('class','active');
@@ -164,27 +164,40 @@ function moonCycle() {
 		//hide all and show eq(i) sun polygon
 	}, dayMil / 24 * multiplierForDemo);
 }
-
-$('#testButton').on('click', function (evt) {
-	var $moons = $('#MOON path'),
-		dayNum = 0; // 0 = Monday
-	// initialize timers
-	window.clearInterval(sunCycleTimer);
+function startAnimation() {
+	var $grassAndSky = $('#GRASS, #SKY');
+	$grassAndSky.attr('class','animate');
+}
+function resetAnimation() {
+	var $grassAndSky = $('#GRASS, #SKY');
+	$grassAndSky.attr('class','');
+}
+$('#resetSimBtn').on('click', function (evt) {
+	// reset timers
+	window.clearInterval(window.sunCycleTimer);
 	window.clearInterval(moonCycleTimer);
-	for(var i=0; i < dayNameTimer.length; i+=1) {
-	    clearTimeout(dayNameTimer[i]);
+	for(var i=0; i < window.dayNameTimer.length; i+=1) {
+	    clearTimeout(window.dayNameTimer[i]);
 	}
-	for(var i=0; i < lightTimer.length; i+=1) {
-	    clearTimeout(lightTimer[i]);
+	for(var i=0; i < window.lightTimer.length; i+=1) {
+	    clearTimeout(window.lightTimer[i]);
 	}
-	// start the sunCycle interval
+	// reset sun and moon
+	$suns.attr('class','');
 	$moons.attr('class','');
 	$moons.eq(6).attr('class','active');
+	// reset grass/sky animation
+	resetAnimation();
+});
+$('#runSimBtn').on('click', function (evt) {
+	var dayNum = 0; // 0 = Monday
+	// start the sun and moon interval
 	sunCycle();
 	moonCycle();
+	startAnimation();
 	// start the 24 hour clock to change the day name
 	Object.keys(lightData).forEach(function(dayName, d) {
-		dayNameTimer.push(window.setTimeout(function () {
+		window.dayNameTimer.push(window.setTimeout(function () {
 			$dayName.text(dayName);
 		}, dayMil * d * multiplierForDemo));
 	});
@@ -194,7 +207,7 @@ $('#testButton').on('click', function (evt) {
 			Object.keys(lightEvents).forEach(function(propertyName, i) {
 				var eventTime = toMilliseconds(lightEvents[i].eventTime);
 					waitTime = (eventTime + (dayNum * dayMil)) * multiplierForDemo;
-			    lightTimer.push(window.setTimeout(function () {
+			    window.lightTimer.push(window.setTimeout(function () {
 			    	$('[data-id="' + lightId + '"]').attr('data-status', lightEvents[propertyName].event);
 			        console.log(lightEvents[propertyName].eventTime + ': light ' + lightId + ': ' + lightEvents[propertyName].event);
 			    }, waitTime));
