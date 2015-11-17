@@ -36,6 +36,10 @@ svg [data-status="on"] {
 #SUN polygon {
 	display: none;
 }
+#MOON .active,
+#SUN .active {
+	display: block;
+}
 button:focus {
 	background-color: red;
 	color: white;

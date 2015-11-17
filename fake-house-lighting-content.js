@@ -6,6 +6,7 @@ var $dayName = $('#day'),
 	dayMil = 24 * 60 * 60 * 1000; // dayMil is the number of milliseconds in a full day
 	multiplierForDemo = 1 / (60 * 60), // 24 seconds = 24 hours
 	sunCycleTimer = null,
+	moonCycleTimer = null,
 	dayNameTimer = [],
 	lightTimer = [],
 	lightData = {
@@ -144,18 +145,32 @@ function toMilliseconds(strMilitaryTime) {
 
 function sunCycle() {
 	var $suns = $('#SUN polygon'),
-		currSun = 0;
+		currSun = 19;
 	sunCycleTimer = window.setInterval(function () {
-		currSun = (currSun < 24) ? (currSun += 1) : 1;
-		console.log('currSun = ' + currSun);
+		$suns.attr('class','');
+		$suns.eq(currSun).attr('class','active');
+		currSun = (currSun < 23) ? (currSun += 1) : 0;
+		//hide all and show eq(i) sun polygon
+	}, dayMil / 24 * multiplierForDemo);
+}
+
+function moonCycle() {
+	var $moons = $('#MOON path'),
+		currMoon = 7;
+	moonCycleTimer = window.setInterval(function () {
+		$moons.attr('class','');
+		$moons.eq(currMoon).attr('class','active');
+		currMoon = (currMoon < 23) ? (currMoon += 1) : 0;
 		//hide all and show eq(i) sun polygon
 	}, dayMil / 24 * multiplierForDemo);
 }
 
 $('#testButton').on('click', function (evt) {
-	var dayNum = 0; // 0 = Monday
+	var $moons = $('#MOON path'),
+		dayNum = 0; // 0 = Monday
 	// initialize timers
 	window.clearInterval(sunCycleTimer);
+	window.clearInterval(moonCycleTimer);
 	for(var i=0; i < dayNameTimer.length; i+=1) {
 	    clearTimeout(dayNameTimer[i]);
 	}
@@ -163,7 +178,10 @@ $('#testButton').on('click', function (evt) {
 	    clearTimeout(lightTimer[i]);
 	}
 	// start the sunCycle interval
+	$moons.attr('class','');
+	$moons.eq(6).attr('class','active');
 	sunCycle();
+	moonCycle();
 	// start the 24 hour clock to change the day name
 	Object.keys(lightData).forEach(function(dayName, d) {
 		dayNameTimer.push(window.setTimeout(function () {
