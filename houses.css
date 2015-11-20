@@ -1,0 +1,78 @@
+body {
+	background-color: black;
+	color: white;
+	text-align: center;
+}
+#day {
+	font-size: 1.5rem;
+}
+.rooms {
+	text-align: center;
+}
+.room {
+	width: 200px;
+	height: 200px;
+	display: inline-block;
+	box-sizing: border-box;
+	padding-top: 90px;
+	text-align: center;
+}
+/* eventually remove */
+	[data-status="off"] {
+		background-color: gray;
+	}
+	[data-status="on"] {
+		background-color: yellow;
+	}
+/* end eventually remove */
+svg [data-status="turn_off"] {
+	background-color: transparent; /* eventually remove */
+	display: none;
+}
+svg [data-status="turn_on"] {
+	background-color: transparent; /* eventually remove */
+	display: block;
+}
+#MOON path,
+#SUN polygon {
+	display: none;
+}
+#MOON .active,
+#SUN .active {
+	display: block;
+}
+button:focus {
+	background-color: red;
+	color: white;
+}
+.svg-container {
+	width: 100%;
+	margin: 0 auto;
+	background-color: #fff;
+}
+
+#GRASS.animate {
+  animation: opacity-grass 24s linear infinite;
+}
+#SKY.animate {
+  animation: opacity-sky 24s linear infinite;
+}
+
+@keyframes opacity-grass {
+  0% { opacity: 1; }
+  21% { opacity: 1; }
+  33% { opacity: 0; }
+  67% { opacity: 0; }
+  79% { opacity: 1; }
+  100% { opacity: 1; }
+}
+@keyframes opacity-sky {
+  0% { opacity: 1; }
+  21% { opacity: 1; }
+  33% { opacity: 0.3; }
+  67% { opacity: 0.3; }
+  79% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+
